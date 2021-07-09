@@ -1,5 +1,7 @@
 package leetcode.dp
 
+import kotlin.math.exp
+
 class DifferentWayToAddParentheses {
 
     private lateinit var dp: Array<Array<ArrayList<Int>>>
@@ -32,7 +34,7 @@ class DifferentWayToAddParentheses {
         }
     }
 
-    fun diffWaysToCompute(express: String) : List<Int> {
+    fun diffWaysToCompute(express: String): List<Int> {
         val arr = arrayListOf<String>()
         var d = ""
         for (c in express) {
@@ -49,5 +51,24 @@ class DifferentWayToAddParentheses {
         dp = Array(arr.size) { Array(arr.size) { arrayListOf<Int>() } }
         iterative(arr)
         return dp[arr.size-1][0]
+    }
+
+    private val memo = mutableMapOf<String, List<Int>>()
+    private val operators = arrayOf('+', '-', '*')
+    fun recursive(expression: String): List<Int> {
+        if (memo.containsKey(expression)) return memo[expression]!!
+        val res = mutableListOf<Int>()
+        for (i in expression.indices) {
+            if (operators.contains(expression[i])) {
+                val l = recursive(expression.substring(0, i))
+                val r = recursive((expression.substring(i + 1)))
+                for (m in l)
+                    for (n in r)
+                        res.add(cal(m, n, expression[i].toString()))
+            }
+        }
+        if (res.isEmpty()) res.add(expression.toInt())
+        memo[expression] = res;
+        return res
     }
 }
