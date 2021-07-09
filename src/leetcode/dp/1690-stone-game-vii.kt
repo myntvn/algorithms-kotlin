@@ -14,7 +14,7 @@ class StoneGameVII {
         return dp[left][right]
     }
 
-    fun main(stones: IntArray): Int {
+    fun test(stones: IntArray): Int {
         arr = stones
         dp = Array(stones.size) { IntArray(stones.size) }
         return dfs(stones.sum(), 0, stones.size - 1)
