@@ -1,2 +1,2 @@
 # algorithms-kotlin
-Solving problems on Leetcode by kotlin
+Learning algorithms and data structures using Kotlin.
