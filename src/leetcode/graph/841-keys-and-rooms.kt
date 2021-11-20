@@ -9,13 +9,10 @@ class KeysAndRooms {
         val queue = LinkedList<Int>()
         queue.add(0)
         while (queue.isNotEmpty()) {
-            var n = queue.size
-            while (n-- > 0) {
-                val front = queue.remove()
-                visited[front] = true
-                for (v in rooms[front]) {
-                    if (!visited[v]) queue.add(v)
-                }
+            val front = queue.remove()
+            visited[front] = true
+            for (v in rooms[front]) {
+                if (!visited[v]) queue.add(v)
             }
         }
         return visited.count { it } == rooms.size
