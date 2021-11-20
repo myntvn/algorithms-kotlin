@@ -4,7 +4,20 @@ import java.util.*
 
 class KeysAndRooms {
 
-    private fun canVisitAllRooms(rooms: List<List<Int>>): Boolean {
+    private fun dfs(rooms: List<List<Int>>): Boolean {
+        val visited = BooleanArray(rooms.size)
+
+        fun check(room: Int) {
+            visited[room] = true
+            for (v in rooms[room]) {
+                if (!visited[v]) check(v)
+            }
+        }
+        check(0)
+        return visited.all { it }
+    }
+
+    private fun bfs(rooms: List<List<Int>>): Boolean {
         val visited = BooleanArray(rooms.size)
         val queue = LinkedList<Int>()
         queue.add(0)
@@ -15,7 +28,11 @@ class KeysAndRooms {
                 if (!visited[v]) queue.add(v)
             }
         }
-        return visited.count { it } == rooms.size
+        return visited.all { it }
+    }
+
+    private fun canVisitAllRooms(rooms: List<List<Int>>): Boolean {
+        return dfs(rooms)
     }
 
     operator fun invoke(rooms: List<List<Int>>): Boolean {
