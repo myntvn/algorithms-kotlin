@@ -2,13 +2,6 @@ package leetcode.graph
 
 class NumberOfOperationsToMakeNetworkConnected {
 
-    private fun dfs(graph: Array<MutableList<Int>>, visited: BooleanArray, start: Int) {
-        visited[start] = true
-        for (v in graph[start]) {
-            if (!visited[v]) dfs(graph, visited, v)
-        }
-    }
-
     private fun makeConnected(n: Int, connections: Array<IntArray>): Int {
         if (connections.size < n - 1) return -1
 
@@ -19,15 +12,15 @@ class NumberOfOperationsToMakeNetworkConnected {
         }
 
         val visited = BooleanArray(n)
-        var res = 0
-        for (v in 0 until n) {
-            if (!visited[v]) {
-                ++res;
-                dfs(graph, visited, v)
-            }
+
+        fun dfs(start: Int): Int {
+            if (visited[start]) return 0
+            visited[start] = true
+            for (v in graph[start]) dfs(v)
+            return 1
         }
 
-        return res - 1
+        return (0 until n).sumOf { dfs(it) } - 1
     }
 
     operator fun invoke(n: Int, connections: Array<IntArray>): Int {
