@@ -21,10 +21,10 @@ class EvaluateDivision {
         queries: List<List<String>>
     ): DoubleArray {
         equations.forEachIndexed { idx, equation ->
-            if (!graph.containsKey(equation[0])) graph[equation[0]] = mutableListOf()
+            graph.putIfAbsent(equation[0], mutableListOf())
             graph[equation[0]]?.add(Pair(equation[1], values[idx]))
 
-            if (!graph.containsKey(equation[1])) graph[equation[1]] = mutableListOf()
+            graph.putIfAbsent(equation[1], mutableListOf())
             graph[equation[1]]?.add(Pair(equation[0], 1 / values[idx]))
         }
 
