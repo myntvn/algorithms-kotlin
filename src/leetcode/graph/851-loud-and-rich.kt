@@ -2,39 +2,28 @@ package leetcode.graph
 
 class LoudAndRich {
 
-    private fun dfs(graph: Array<MutableList<Int>>, quiet: IntArray, visited: BooleanArray, start: Int): Pair<Int, Int> {
-        var x = start
-        var y = quiet[start]
-        for (v in graph[start]) {
-            if (!visited[v]) {
-                visited[v] = true
-                if (quiet[v] < y) {
-                    y = quiet[v]
-                    x = v
-                }
-                val (newX, newY) = dfs(graph, quiet, visited, v)
-                if (newY < y) {
-                    x = newX
-                    y = newY
-                }
-            }
+    private lateinit var res: IntArray
+    private lateinit var graph: Array<MutableList<Int>>
+    private lateinit var quiet: IntArray
+    private fun dfs(node: Int): Int {
+        if (res[node] != -1) return res[node]
+        res[node] = node
+        for (v in graph[node]) {
+            val x = dfs(v)
+            if (quiet[x] < quiet[res[node]]) res[node] = x
         }
-        return Pair(x, y)
+        return res[node]
     }
 
     private fun loudAndRich(richer: Array<IntArray>, quiet: IntArray): IntArray {
         val n = quiet.size
-        val graph = Array<MutableList<Int>>(n) { mutableListOf() }
+        graph = Array<MutableList<Int>>(n) { mutableListOf() }
+        this.quiet = quiet
         richer.forEach {
             graph[it[1]].add(it[0])
         }
-
-        val res = IntArray(n)
-
-        for (i in 0 until n) {
-            res[i] = dfs(graph, quiet, BooleanArray(n), i).first
-        }
-
+        res = IntArray(n) { -1 }
+        for (i in 0 until n) dfs(i)
         return res
     }
 
