@@ -2,11 +2,9 @@ package leetcode.graph
 
 class LoudAndRich {
 
-    // Least quiet person's index
-    var x = 0
-    // Least quiet value
-    var y = 0
-    private fun dfs(graph: Array<MutableList<Int>>, quiet: IntArray, visited: BooleanArray, start: Int) {
+    private fun dfs(graph: Array<MutableList<Int>>, quiet: IntArray, visited: BooleanArray, start: Int): Pair<Int, Int> {
+        var x = start
+        var y = quiet[start]
         for (v in graph[start]) {
             if (!visited[v]) {
                 visited[v] = true
@@ -14,9 +12,14 @@ class LoudAndRich {
                     y = quiet[v]
                     x = v
                 }
-                dfs(graph, quiet, visited, v)
+                val (newX, newY) = dfs(graph, quiet, visited, v)
+                if (newY < y) {
+                    x = newX
+                    y = newY
+                }
             }
         }
+        return Pair(x, y)
     }
 
     private fun loudAndRich(richer: Array<IntArray>, quiet: IntArray): IntArray {
@@ -29,10 +32,7 @@ class LoudAndRich {
         val res = IntArray(n)
 
         for (i in 0 until n) {
-            x = i
-            y = quiet[i]
-            dfs(graph, quiet, BooleanArray(n), i)
-            res[i] = x
+            res[i] = dfs(graph, quiet, BooleanArray(n), i).first
         }
 
         return res
